@@ -1,7 +1,7 @@
 # This is a fork of AmbiverseNLU
-To start your analysis you have to build the Dockerfile, run the following command in this directory
+To start your analysis you have to build the Dockerfile, run the following command in the "dockers" directory
 ~~~~~~~~~~~~
-docker build .
+docker build -t trivadis/ambiverse-nlu:latest .
 ~~~~~~~~~~~~
 
 ---- after this line comes the forked README ----
