@@ -19,13 +19,13 @@ ADD cassandra-init.sh /cassandra-init.sh
 ENV CASSANDRA_VERSION=3.11.4
 ENV CASSANDRA_PATH="cassandra/${CASSANDRA_VERSION}/apache-cassandra-${CASSANDRA_VERSION}-bin.tar.gz"
 ENV CASSANDRA_DOWNLOAD="http://www.apache.org/dyn/closer.cgi?path=/${CASSANDRA_PATH}&as_json=1"
+ENV CASSANDRA_MIRROR = "https://archive.apache.org/dist/cassandra/3.11.4/apache-cassandra-3.11.4-bin.tar.gz"
 
 RUN set -x \
   && mkdir -p /cassandra \
   && mkdir -p /var/tmp/data \
-  && CASSANDRA_MIRROR=`wget -q -O - ${CASSANDRA_DOWNLOAD} | grep -oP "(?<=\"preferred\": \")[^\"]+"` \
   && echo "Downloading cassandra " \
-  && wget -q -O - $CASSANDRA_MIRROR$CASSANDRA_PATH | tar -xzf - -C /usr/local/
+  && wget -q -O - $CASSANDRA_MIRROR | tar -xzf - -C /usr/local/
 
 ENV MAVEN_OPTS -Djetty.port=8080 -Xmx44G -Dorg.eclipse.jetty.annotations.maxWait=180
 ENTRYPOINT ["mvn", "jetty:run"]
