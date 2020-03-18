@@ -51,6 +51,8 @@ public class ClausIE {
 
   PropositionGenerator propositionGenerator;
   {
+    // this is now hardcoding the reverbation stile into it, as the property seems never to be loaded:
+    options.reverbRelationStyle = false;
     if(options.reverbRelationStyle) {
       propositionGenerator = new ReverbPropositionGeneration(this);
     } else {
