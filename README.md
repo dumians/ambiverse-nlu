@@ -3,6 +3,10 @@ To start your analysis you have to build the Dockerfile, run the following comma
 ~~~~~~~~~~~~
 docker build -t trivadis/ambiverse-nlu:latest .
 ~~~~~~~~~~~~
+Then start the environment from the root directory of your git import:
+~~~~~~~~~~~~
+docker-compose -f docker-compose/service-postgres.yml up
+~~~~~~~~~~~~
 
 ---- after this line comes the forked README ----
 Try the [demo](http://ambiversenlu.mpi-inf.mpg.de) at http://ambiversenlu.mpi-inf.mpg.de
