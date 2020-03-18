@@ -1,6 +1,8 @@
 # This is a fork of AmbiverseNLU
-To start your analysis you have to build the Dockerfile
-
+To start your analysis you have to build the Dockerfile, run the following command in this directory
+~~~~~~~~~~~~
+docker build .
+~~~~~~~~~~~~
 
 ---- after this line comes the forked README ----
 Try the [demo](http://ambiversenlu.mpi-inf.mpg.de) at http://ambiversenlu.mpi-inf.mpg.de
