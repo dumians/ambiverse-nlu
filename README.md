@@ -1,7 +1,11 @@
 # This is a fork of AmbiverseNLU
-To start your analysis you have to build the Dockerfile, run the following command in the "dockers" directory
+To start your analysis you have to build the Dockerfiles, run the following statements, to create the database (might take some time)
 ~~~~~~~~~~~~
-docker build -t trivadis/ambiverse-nlu:latest .
+docker build -t trivadis/nlu-db-postgres:latest dockers/postgres
+~~~~~~~~~~~~
+And the NLU service
+~~~~~~~~~~~~
+docker build -t trivadis/ambiverse-nlu:latest dockers/nlu
 ~~~~~~~~~~~~
 Then start the environment from the root directory of your git import:
 ~~~~~~~~~~~~
