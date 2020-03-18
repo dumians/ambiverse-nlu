@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: ambiversenlu
 
   nlu:
-    image: ambiverse/ambiverse-nlu
+    image: trivadis/ambiverse-nlu
     restart: always
     depends_on:
       - db
