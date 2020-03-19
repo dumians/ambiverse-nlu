@@ -14,16 +14,12 @@ public class DataAccessKeyphraseTokensCacheTarget extends DataAccessCacheTarget 
 
   private TIntObjectHashMap<int[]> data_;
 
-  public DataAccessKeyphraseTokensCacheTarget(String path) {
-    super(path);
-  }
-
   @Override public String getId() {
     return ID;
   }
 
   @Override protected File getCacheFile() {
-    return new File(path + "/" + "aida-keyphrase_tokens.cache");
+    return new File("aida-keyphrase_tokens.cache");
   }
 
   @Override protected void loadFromDb() throws EntityLinkingDataAccessException {

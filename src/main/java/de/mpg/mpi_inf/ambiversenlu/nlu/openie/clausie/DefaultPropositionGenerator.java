@@ -1,6 +1,8 @@
 package de.mpg.mpi_inf.ambiversenlu.nlu.openie.clausie;
 
 import de.mpg.mpi_inf.ambiversenlu.nlu.openie.clausie.Constituent.Flag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -9,6 +11,8 @@ import java.util.*;
  * @date $LastChangedDate: 2013-08-26 15:31:37 +0200 (Mon, 26 Aug 2013) $
  * @version $LastChangedRevision: 977 $ */
 public class DefaultPropositionGenerator extends PropositionGenerator {
+  private Logger logger_ = LoggerFactory.getLogger(ClausIE.class);
+
 
   boolean onlyKeepLongest = false;
 
@@ -19,9 +23,11 @@ public class DefaultPropositionGenerator extends PropositionGenerator {
   @Override public void generate(List<Proposition> result, Clause clause, List<Boolean> include) {
     Proposition proposition = new Proposition();
     List<Proposition> propositions = new ArrayList<Proposition>();
+    logger_.info("entering function");
     if(clause.processed) {
       Collections.fill(include, Boolean.TRUE);
     }
+    logger_.info("processed includes");
 
     int position = 0;
     // process subject
@@ -37,6 +43,7 @@ public class DefaultPropositionGenerator extends PropositionGenerator {
     } else {
       throw new IllegalArgumentException();
     }
+    logger_.info("processed verbs");
 
     propositions.add(proposition);
 
@@ -60,6 +67,7 @@ public class DefaultPropositionGenerator extends PropositionGenerator {
         }
       }
     }
+    logger_.info("processed arguments");
 
     // process adverbials  before verb
     sortedIndexes.clear();
@@ -78,6 +86,8 @@ public class DefaultPropositionGenerator extends PropositionGenerator {
         }
       }
     }
+    logger_.info("processed adverbials");
+
 
     // make 3-ary if needed
     if (!clausIE.options.nary) {
@@ -101,6 +111,7 @@ public class DefaultPropositionGenerator extends PropositionGenerator {
         }
       }
     }
+    logger_.info("made 3-nary");
 
     // we are done
     result.addAll(propositions);

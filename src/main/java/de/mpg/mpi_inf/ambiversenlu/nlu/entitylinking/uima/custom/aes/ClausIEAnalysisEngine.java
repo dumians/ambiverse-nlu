@@ -88,17 +88,21 @@ public class ClausIEAnalysisEngine extends JCasAnnotator_ImplBase {
         SemanticGraph semanticGraph = sentence.get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class);
         Tree tree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
         ClausIE clausIE = new ClausIE(semanticGraph, tree, clausieOptions);
+        logger_.info("Booted Clausie");
         clausIE.detectClauses();
+        logger_.info("Detected Clauses");
         clausIE.generatePropositions();
+        logger_.info("Generated Propositions");
         List<Proposition> propositions = new ArrayList<>(clausIE.getPropositions());
+        logger_.info("Generated Propositions");
 
         if(removeRedundant) {
           removeRedundant(propositions);
         }
-
+        logger_.info("Propositions loaded in Clausie");
         for (Proposition p : propositions) {
-  //        System.out.println(p);
-  //        System.out.println(p.getDictRelation());
+            System.out.println(p);
+            System.out.println(p.getDictRelation());
 
             OpenFact of = new OpenFact(jCas);
             Subject subject = addConstituentToJCas(jCas, Subject.class, p, 0);

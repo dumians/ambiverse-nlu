@@ -1,7 +1,10 @@
 package de.mpg.mpi_inf.ambiversenlu.nlu.openie.clausie;
 
+import de.mpg.mpi_inf.ambiversenlu.nlu.entitylinking.uima.custom.aes.ClausIEAnalysisEngine;
 import de.mpg.mpi_inf.ambiversenlu.nlu.entitylinking.util.ClassPathUtils;
 import edu.stanford.nlp.ling.IndexedWord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -18,6 +21,8 @@ import static java.lang.System.in;
  * @date $LastChangedDate: 2013-04-24 11:35:23 +0200 (Wed, 24 Apr 2013) $
  * @version $LastChangedRevision: 739 $ */
 public class Options {
+  private Logger logger_ = LoggerFactory.getLogger(Options.class);
+
 
   // informatin
   public static Dictionary dictCopular;
@@ -138,6 +143,7 @@ public class Options {
     lemmatize = Boolean.parseBoolean(getProperty(prop, "lemmatize"));
     includeOptionalAdverbs = Boolean.parseBoolean(getProperty(prop, "includeOptionalAdverbs"));
     reverbRelationStyle = Boolean.parseBoolean(getProperty(prop, "reverbRelationStyle"));
+    logger_.info("reverbRelationStyle is: " + reverbRelationStyle);
     keepOnlyLongest = Boolean.parseBoolean(getProperty(prop, "keepOnlyLongest"));
     nary = Boolean.parseBoolean(getProperty(prop, "nary"));
     minOptionalArgs = Integer.parseInt(getProperty(prop, "minOptionalArgs"));

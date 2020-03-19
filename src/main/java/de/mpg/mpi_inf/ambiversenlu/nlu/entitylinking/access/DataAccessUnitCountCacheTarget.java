@@ -15,8 +15,7 @@ public class DataAccessUnitCountCacheTarget extends DataAccessIntIntCacheTarget 
 
   private UnitType unitType;
 
-  public DataAccessUnitCountCacheTarget(UnitType unitType, String path) {
-    super(path);
+  public DataAccessUnitCountCacheTarget(UnitType unitType) {
     this.unitType = unitType;
     ID = unitType.getUnitName().toUpperCase() + "_COUNT";
   }
@@ -26,7 +25,7 @@ public class DataAccessUnitCountCacheTarget extends DataAccessIntIntCacheTarget 
   }
 
   @Override protected File getCacheFile() {
-    return new File(path + "/" + "aida-" + unitType.getUnitName() + "_count.cache");
+    return new File("aida-" + unitType.getUnitName() + "_count.cache");
   }
 
   @Override protected void loadFromDb() throws EntityLinkingDataAccessException {

@@ -1,5 +1,6 @@
 package de.mpg.mpi_inf.ambiversenlu.nlu.openie.clausie;
 
+import de.mpg.mpi_inf.ambiversenlu.nlu.entitylinking.uima.custom.aes.ClausIEAnalysisEngine;
 import de.mpg.mpi_inf.ambiversenlu.nlu.openie.clausie.Constituent.Flag;
 import de.mpg.mpi_inf.ambiversenlu.nlu.openie.clausie.JavaUtils.MapUtil;
 import edu.stanford.nlp.io.EncodingPrintWriter.out;
@@ -16,12 +17,17 @@ import edu.stanford.nlp.util.ScoredObject;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.*;
 
 public class ClausIE {
+
+  private Logger logger_ = LoggerFactory.getLogger(ClausIE.class);
+
 
   Tree depTree;
 
@@ -51,8 +57,8 @@ public class ClausIE {
 
   PropositionGenerator propositionGenerator;
   {
-    // this is now hardcoding the reverbation stile into it, as the property seems never to be loaded:
     options.reverbRelationStyle = false;
+    logger_.info("ReverbRelationStyle is: " + options.reverbRelationStyle);
     if(options.reverbRelationStyle) {
       propositionGenerator = new ReverbPropositionGeneration(this);
     } else {
@@ -185,6 +191,8 @@ public class ClausIE {
 
   /** Generates propositions from the clauses in the sentence. */
   public void generatePropositions() {
+    logger_.info("entering Propositions");
+
     propositions.clear();
 
     // holds alternative options for each constituents (obtained by
@@ -197,9 +205,11 @@ public class ClausIE {
     // holds all valid combination of constituents for which a proposition
     // is to be generated
     final List<List<Boolean>> includeConstituents = new ArrayList<List<Boolean>>();
-
-    // let's start
+    logger_.info("iterating clauses");
+    logger_.info("Number of  clauses: " + clauses.size());
+    // let's star
     for (Clause clause : clauses) {
+      logger_.info("Current clause: " + clause.toString());
       // process coordinating conjunctions
       constituents.clear();
       for (int i = 0; i < clause.getConstituents().size(); i++) {
@@ -244,16 +254,21 @@ public class ClausIE {
         }
         constituents.add(alternatives);
       }
+      logger_.info("Ended iterating Propositions");
 
       // create a list of all combinations of constituents for which a
       // proposition should be generated
       includeConstituents.clear();
       include.clear();
+      logger_.info("iterating Constituents");
+
       for (int i = 0; i < clause.getConstituents().size(); i++) {
         Flag flag = clause.getFlag(i, options);
         clause.setFlag(i, flag);
         include.add(!flag.equals(Flag.IGNORE));
       }
+      logger_.info("ended iterating Constituents");
+
       if (options.nary || options.keepOnlyLongest) {
         // we always include all constituents for n-ary ouput
         // (optional parts marked later)
@@ -298,6 +313,7 @@ public class ClausIE {
           }
         }.run();
       }
+      logger_.info("ended iterating trough other constituents");
 
       // create a temporary clause for which to generate a proposition
       final Clause tempClause = clause.clone();
@@ -307,15 +323,21 @@ public class ClausIE {
 
         @Override public void run() {
           // select which constituents to include
+          logger_.info("Selecting Constituents");
           for (List<Boolean> include : includeConstituents) {
             // now select an alternative for each constituent
+            logger_.info("Selecting Constituent");
+            logger_.info("constituens size: " + constituents.size());
             selectConstituent(0, include);
           }
         }
 
         void selectConstituent(int i, List<Boolean> include) {
           if (i < constituents.size()) {
+            logger_.info("constituens size: " + constituents.size() + " taking if");
             if (include.get(i)) {
+              logger_.info("constituens got");
+
               List<Constituent> alternatives = constituents.get(i);
               for (int j = 0; j < alternatives.size(); j++) {
                 tempClause.getConstituents().set(i, alternatives.get(j));
@@ -325,11 +347,16 @@ public class ClausIE {
               selectConstituent(i + 1, include);
             }
           } else {
+            logger_.info("constituens size: " + constituents.size() + " taking else");
             // everything selected; generate
             propositionGenerator.generate(propositions, tempClause, include);
+
           }
+          logger_.info("ended iterating trough constituens");
         }
       }.run();
+      logger_.info("ended iterating trough everything");
+
     }
   }
 

@@ -4,6 +4,8 @@ import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -11,6 +13,8 @@ import java.util.Map.Entry;
 import static de.mpg.mpi_inf.ambiversenlu.nlu.openie.clausie.ClauseDetector.excludeVertexes;
 
 public class ReverbPropositionGeneration extends DefaultPropositionGenerator {
+
+  private Logger logger_ = LoggerFactory.getLogger(ClausIE.class);
 
   /** Constructs a proposition generator
    * @param clausIE*/
@@ -35,16 +39,21 @@ public class ReverbPropositionGeneration extends DefaultPropositionGenerator {
 
   @Override public void generate(List<Proposition> result, Clause clause, List<Boolean> include) {
     String relation;
+    logger_.info("starting reverb proposition generator");
     if(clause.getConstituents().get(clause.getVerb()) instanceof TextConstituent) {
       relation = clause.getConstituents().get(clause.getVerb()).rootString();
     } else {
       relation = ((IndexedConstituent) clause.getConstituents().get(clause.getVerb())).root.lemma();
     }
+    logger_.info("got root relation");
     clause.setDictRelation(relation);
+    logger_.info("setted dict relation, rearragning");
     Clause tmp = rearrangeClause(clause, include);
 
+    logger_.info("got temp result");
     List<Proposition> tmpResult = new ArrayList<>();
     super.generate(tmpResult, tmp, include);
+    logger_.info("iterating though tmp results");
     for(Proposition p: tmpResult) {
       p.setDictRelation(tmp.getDictRelation());
     }
@@ -61,6 +70,7 @@ public class ReverbPropositionGeneration extends DefaultPropositionGenerator {
         toRemove.add(i);
       }
     }
+    logger_.info("marked clauses for removal");
     nClause.removeConstituents(toRemove);
     SemanticGraph semanticGraph = nClause.createSemanticGraph(true);
     Constituent constituent = nClause.getConstituents().get(nClause.getVerb());
@@ -71,11 +81,14 @@ public class ReverbPropositionGeneration extends DefaultPropositionGenerator {
       }
       constituentHeads.add(((IndexedConstituent)c).getRoot());
     }
+    logger_.info("done added constituent heads");
+    logger_.info("the constituent is: " + constituent.rootString());
     if(constituent instanceof IndexedConstituent) {
       IndexedConstituent ic = (IndexedConstituent) constituent;
       Map<Integer, IndexedWord> included = new TreeMap<>();
       Map<Integer, IndexedWord> definite = new TreeMap<>();
       List<Integer> allowedOmitAlternative = new ArrayList<>();
+      logger_.info("generating the Reverb Relation Clause");
       generateReverbRelation(nClause, ic.root, semanticGraph, included, definite, true, constituentHeads, allowedOmitAlternative);
       if(!definite.isEmpty()) {
         nClause = processClause(nClause, definite, semanticGraph);
