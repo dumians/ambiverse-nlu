@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: trivadis/nlu-db-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ambiversenlu
+      POSTGRES_DB: aida_20180120_cs_de_en_es_ru_zh_v18
+      #POSTGRES_DB: aida_20180120_b3_de_en_v18
+      POSTGRES_USER: ambiversenlu
+
+  nlu:
+    image: trivadis/ambiverse-nlu
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    environment:
+      AIDA_CONF: aida_20180120_cs_de_en_es_ru_zh_v18_db
+      #AIDA_CONF: aida_20180120_b3_de_en_v18_db

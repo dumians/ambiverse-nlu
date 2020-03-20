@@ -1,4 +1,5 @@
 # This is a fork of AmbiverseNLU
+## low number of entities
 To start your analysis you have to build the Dockerfiles, run the following statements, to create the database:
 ~~~~~~~~~~~~
 cd dockers/postgres 
@@ -14,6 +15,26 @@ Then start the environment from the root directory of your git import (might tak
 ~~~~~~~~~~~~
 docker-compose -f docker-compose/service-postgres.yml up
 ~~~~~~~~~~~~
+
+## full number of entities
+To start your analysis you have to build the Dockerfiles, run the following statements, to create the database:
+~~~~~~~~~~~~
+cd dockers/postgres 
+wget http://ambiversenlu-download.mpi-inf.mpg.de/postgres/aida_20180120_cs_de_en_es_ru_zh_v18.sql.gz 
+cd ../..
+docker build -t trivadis/nlu-db-postgres-large:latest dockers/postgres-large
+~~~~~~~~~~~~
+And the NLU service
+~~~~~~~~~~~~
+docker build -t trivadis/ambiverse-nlu:latest dockers/nlu
+~~~~~~~~~~~~
+Then start the environment from the root directory of your git import (might take some time)
+~~~~~~~~~~~~
+docker-compose -f docker-compose/service-postgres.yml up
+~~~~~~~~~~~~
+
+
+
 
 ---- after this line comes the forked README ----
 Try the [demo](http://ambiversenlu.mpi-inf.mpg.de) at http://ambiversenlu.mpi-inf.mpg.de
