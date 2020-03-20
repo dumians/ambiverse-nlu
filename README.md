@@ -33,7 +33,21 @@ Then start the environment from the root directory of your git import (might tak
 docker-compose -f docker-compose/service-postgres-large.yml up
 ~~~~~~~~~~~~
 
+## testing the environment endpoint
+It make take some time to boot the whole environment. After it is fully up and running you can fire this query from your commandline:
+~~~~~~~~~~~~
+curl --request POST \
+  --url http://localhost:8080/factextraction/analyze \
+  --header 'accept: application/json' \
+  --header 'content-type: application/json' \
+  --data '{"docId": "doc1", "text": "Jack founded Alibaba with investments from SoftBank and Goldman.", "extractConcepts": "true", "language": "en" }'
+~~~~~~~~~~~~
 
+In the case everything is fine, there is a JSON returned where entities are detected, annotated and also facts extracted.
+If you started the small environment, this can be expected:
+```json
+{"docId":"doc1","language":"en","matches":[{"charLength":4,"charOffset":0,"text":"Jack","entity":{}},{"charLength":7,"charOffset":13,"text":"Alibaba","entity":{}},{"charLength":8,"charOffset":43,"text":"SoftBank","entity":{}},{"charLength":7,"charOffset":56,"text":"Goldman","entity":{"id":"http://www.wikidata.org/entity/Q193326","confidence":1.0}}],"facts":[{"subject":{"text":"Jack","charOffset":0,"charLength":4},"relation":{"text":"founded","charOffset":5,"charLength":7},"object":{"text":"Alibaba with investments from SoftBank and Goldman","charOffset":13,"charLength":50}}],"entities":[{"id":"http://www.wikidata.org/entity/Q193326","name":"Goldman Sachs","url":"http://en.wikipedia.org/wiki/Goldman%20Sachs","type":"ORGANIZATION","salience":0.23286642671259394}]}
+```
 
 
 ---- after this line comes the forked README ----
