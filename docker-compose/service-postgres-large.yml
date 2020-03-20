@@ -3,7 +3,7 @@ version: '3.1'
 services:
 
   db:
-    image: trivadis/nlu-db-postgres-large
+    image: trivadis/nlu-db-postgres-large:latest
     restart: always
     environment:
       POSTGRES_PASSWORD: ambiversenlu
@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: ambiversenlu
 
   nlu:
-    image: trivadis/ambiverse-nlu-large
+    image: trivadis/ambiverse-nlu-large:latest
     restart: always
     depends_on:
       - db
