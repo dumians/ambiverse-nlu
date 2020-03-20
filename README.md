@@ -30,7 +30,7 @@ docker build -t trivadis/ambiverse-nlu-large:latest dockers/nlu-large
 ~~~~~~~~~~~~
 Then start the environment from the root directory of your git import (might take some time)
 ~~~~~~~~~~~~
-docker-compose -f docker-compose/service-postgres-full.yml up
+docker-compose -f docker-compose/service-postgres-large.yml up
 ~~~~~~~~~~~~
 
 

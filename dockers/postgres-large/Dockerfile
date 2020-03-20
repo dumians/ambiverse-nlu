@@ -22,5 +22,5 @@ VOLUME ${DATA_PATH}
 COPY postgresql.conf.sample /usr/share/postgresql/postgresql.conf.sample
 
 ADD 00-init-user-db.sh /docker-entrypoint-initdb.d/
-ADD aida_20180120_cs_de_en_es_ru_zh_v18 $DATA_PATH/
+ADD aida_20180120_cs_de_en_es_ru_zh_v18.sql.gz $DATA_PATH/
 RUN /bin/bash -c 'chmod +x /docker-entrypoint-initdb.d/00-init-user-db.sh'
