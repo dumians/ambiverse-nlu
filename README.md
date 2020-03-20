@@ -19,7 +19,7 @@ docker-compose -f docker-compose/service-postgres.yml up
 ## full number of entities
 To start your analysis you have to build the Dockerfiles, run the following statements, to create the database:
 ~~~~~~~~~~~~
-cd dockers/postgres 
+cd dockers/postgres-large
 wget http://ambiversenlu-download.mpi-inf.mpg.de/postgres/aida_20180120_cs_de_en_es_ru_zh_v18.sql.gz 
 cd ../..
 docker build -t trivadis/nlu-db-postgres-large:latest dockers/postgres-large
